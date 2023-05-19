@@ -6,5 +6,7 @@
 <!-- ## Schema Diagram -->
 
 ## Current schema (will modify diagram with more tables later)
-<img src="https://github.com/kennyegun24/innovate_backend/assets/109461921/2a3846b6-5883-4073-8424-288da49a0b22"/>
+<img src="https://github.com/kennyegun24/innovate_backend/assets/109461921/aae7fb05-d9b1-4a9c-8d54-21b5fb2a23dd"/>
+<!-- ![drawSQL-in-export-2023-05-19 (1)]() -->
+
 <!-- ![drawSQL-in-export-2023-05-19]() -->
