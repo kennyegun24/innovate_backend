@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_19_210551) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_20_141046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,8 +18,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_210551) do
     t.string "commentor_name"
     t.string "commentor_image"
     t.string "text"
-    t.bigint "user_id"
-    t.bigint "post_id"
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_post_comments_on_post_id"
@@ -29,8 +29,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_210551) do
   create_table "post_likes", force: :cascade do |t|
     t.string "user_image"
     t.string "user_name"
-    t.bigint "user_id"
-    t.bigint "post_id"
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_post_likes_on_post_id"
@@ -42,27 +42,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_210551) do
     t.string "creator_image"
     t.string "text"
     t.string "image"
-    t.string "likes_count"
-    t.string "comments_count"
-    t.bigint "author_id"
+    t.integer "likes_count", default: 0
+    t.integer "comments_count", default: 0
+    t.bigint "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_posts_on_author_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "user_name"
-    t.string "email"
+    t.string "name", null: false
+    t.string "user_name", null: false
+    t.string "email", null: false
     t.string "password_digest"
-    t.string "image"
+    t.string "image", default: "https://res.cloudinary.com/drfqge33t/image/upload/v1684591863/noImage_ynt833.png"
     t.string "header"
     t.string "about"
     t.string "bio"
     t.string "profession"
     t.string "location"
-    t.string "blogs_count"
-    t.string "posts_count"
+    t.integer "blogs_count", default: 0
+    t.integer "posts_count", default: 0
     t.string "website1"
     t.string "website2"
     t.string "website3"
@@ -76,7 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_210551) do
     t.string "description"
     t.string "start_date"
     t.string "end_date"
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_work_experiences_on_user_id"
