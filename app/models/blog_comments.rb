@@ -1,0 +1,2 @@
+class Blog_comments<ApplicationRecord
+end
