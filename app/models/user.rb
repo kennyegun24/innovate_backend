@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    has_secure_password
+
     has_many :posts, foreign_key: 'author_id', class_name: 'Post'
     has_many :post_comments
     has_many :post_likes
