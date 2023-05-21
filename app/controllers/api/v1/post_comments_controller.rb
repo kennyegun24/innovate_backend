@@ -11,13 +11,23 @@ class Api::V1::PostCommentsController < ApplicationController
     end
 
     def destroy
-        @comment = PostComment.find(params[:id])
+        @post = Post.find(params[:id])
+        @comment = @post.post_comments.find_by(id: params[:comment_id], user_id: current_user.id)
 
-        if @comment.destroy
-            render json: { status: 'Success', message: 'Comment deleted' }, status: 200
+        if @comment
+            if @comment.destroy
+                render json: { status: 'Success', message: 'Comment deleted' }, status: 200
+            else
+                render json: { status: 'Failure', message: 'Failed to delete comment' }, status: 422
+            end
         else
-            render json: { status: 'Failure', message: 'Failed to delete comment' }, status: 422
+            render json: { status: 'Failure', message: 'Comment not found' }, status: 404
         end
+    end
+
+    def show
+        @comment = PostComment.where(post_id: params[:id])
+        render json: { status: 'Success', message: 'Successful', data: @comment }, status: 200
     end
 
     def comment_params
