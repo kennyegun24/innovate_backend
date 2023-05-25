@@ -11,7 +11,7 @@ class Api::V1::PostsController < ApplicationController
     end
 
     def index
-        @posts = Post.all
+        @posts = Post.all.order(created_at: :DESC)
         render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
     end
 
