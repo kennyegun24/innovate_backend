@@ -19,7 +19,7 @@ class Api::V1::UsersController < ApplicationController
           token = encode_token(user_id: @user.id)
           render json: {status: 'Success', message: 'Logged in successfully', data: token },status: 200
         else
-          render json: {status: 'Error', message: 'Invalid email or password'},status: 401
+          render json: {status: 'Error', message: @user.errors.sull_messages},status: 401
         end
     end
 
