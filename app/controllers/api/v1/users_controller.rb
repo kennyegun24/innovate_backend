@@ -1,49 +1,49 @@
 class Api::V1::UsersController < ApplicationController
-    skip_before_action :authenticate_request, only: %i[create login]
+  skip_before_action :authenticate_request, only: %i[create login]
 
-    def create
-        @user = User.create(user_params)
+  def create
+    @user = User.create(user_params)
 
-        if @user.save
-        token = encode_token(user_id: @user.id)
-          render json: {status: 'success', message: 'User created', data: {token: token }}, status: 201
-        else
-          render json: {status: 'Error', message: 'Email or Username exists already'}, status: 422
-        end
+    if @user.save
+      token = encode_token(user_id: @user.id)
+      render json: {status: 'success', message: 'User created', data: {token: token }}, status: 201
+    else
+      render json: { status: 'Error', message: @user.errors.full_messages }, status: 422
     end
+  end
 
-    def login
-        @user = User.find_by(email: params[:email])
-    
-        if @user && @user.authenticate(params[:password])
-          token = encode_token(user_id: @user.id)
-          render json: {status: 'Success', message: 'Logged in successfully', data: token },status: 200
-        else
-          render json: {status: 'Error', message: @user.errors.sull_messages},status: 401
-        end
-    end
+  def login
+    @user = User.find_by(email: params[:email])
 
-    def get_profile
-        @user = {
-            name: current_user.name,
-            username: current_user.user_name,
-            email: current_user.email,
-            image: current_user.image,
-            header: current_user.header,
-            bio: current_user.bio,
-            about: current_user.about,
-            profession: current_user.profession,
-            location: current_user.location,
-            blogs_count: current_user.blogs_count,
-            posts_count: current_user.posts_count,
-            website1: current_user.website1,
-            website2: current_user.website2,
-            website3: current_user.website3
-        }
-        render json: {status: 'Success', message: 'User details', data: @user},status: 200
+    if @user&.authenticate(params[:password])
+      token = encode_token(user_id: @user.id)
+      render json: {status: 'Success', message: 'Logged in successfully', data: token },status: 200
+    else
+      render json: { status: 'Error', message: 'Invalid Email or Password' },status: 401
     end
+  end
 
-    def user_params
-        params.require(:user).permit(:name, :user_name, :email, :password)
-    end
+  def get_profile
+    @user = {
+      name: current_user.name,
+      username: current_user.user_name,
+      email: current_user.email,
+      image: current_user.image,
+      header: current_user.header,
+      bio: current_user.bio,
+      about: current_user.about,
+      profession: current_user.profession,
+      location: current_user.location,
+      blogs_count: current_user.blogs_count,
+      posts_count: current_user.posts_count,
+      website1: current_user.website1,
+      website2: current_user.website2,
+      website3: current_user.website3
+    }
+    render json: {status: 'Success', message: 'User details', data: @user},status: 200
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :user_name, :email, :password)
+  end
 end
