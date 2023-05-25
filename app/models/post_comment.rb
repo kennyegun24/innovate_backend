@@ -2,7 +2,7 @@ class PostComment < ApplicationRecord
     belongs_to :user, class_name: 'User', foreign_key: 'user_id'
     belongs_to :post, class_name: 'Post', foreign_key: 'post_id'
 
-    validates :text, presence: true, length: {maximum: 200}
+    validates :text, presence: true, length: { minimum: 3, maximum: 150}
 
     after_save :update_posts_count
     before_save :update_image_name
