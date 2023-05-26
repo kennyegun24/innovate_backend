@@ -6,7 +6,7 @@ class Api::V1::PostsController < ApplicationController
         if @post.save
             render json: {status: 'Successful', message: 'Post created'}, status: 201
         else
-            render json: {status: 'Failed', message: 'Failed to create post'}, status: 422
+            render json: {status: 'Failed', message: @post.errors.full_messages}, status: 422
         end
     end
 

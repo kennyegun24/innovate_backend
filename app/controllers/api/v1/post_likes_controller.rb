@@ -6,7 +6,7 @@ class Api::V1::PostLikesController < ApplicationController
         if @likes.save
             render json: {status: 'Successful', message: 'likes added'}, status: 201
         else
-            render json: {status: 'Failure', message: 'Something went wrong'}, status: 422
+            render json: {status: 'Failure', message: @likes.errors.full_messages}, status: 422
         end
     end
 

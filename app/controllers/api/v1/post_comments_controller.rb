@@ -6,7 +6,7 @@ class Api::V1::PostCommentsController < ApplicationController
         if @comment.save
             render json: {status: 'Successful', message: 'Comment added'}, status: 201
         else
-            render json: {status: 'Failure', message: 'Something went wrong'}, status: 422
+            render json: {status: 'Failure', message: @comment.errors.full_messages}, status: 422
         end
     end
 
@@ -25,7 +25,7 @@ class Api::V1::PostCommentsController < ApplicationController
         end
     end
 
-    def show
+    def index
         @comment = PostComment.where(post_id: params[:id])
         render json: { status: 'Success', message: 'Successful', data: @comment }, status: 200
     end
