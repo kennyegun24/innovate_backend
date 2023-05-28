@@ -20,7 +20,7 @@ class User < ApplicationRecord
   
     def update_posts_with_profile_image
       if saved_change_to_image?
-        user.posts.update_all(creator_image: image)
+        self.posts.update_all(creator_image: image)
       end
     end
 end
