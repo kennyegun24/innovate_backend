@@ -15,6 +15,22 @@ class Api::V1::PostsController < ApplicationController
         render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
     end
 
+    def authenticated_index
+        @posts = Post.all.order(created_at: :DESC)
+
+        @liked = current_user.post_likes.pluck(:post_id)
+
+        @all_posts = @posts.map do |post|
+            {
+                **post.attributes.symbolize_keys,
+              liked: @liked.include?(post.id)
+            }
+          end
+
+        render json: {status: 'Successful', message: 'All Posts', data: @all_posts}, status: 200
+
+    end
+
     def show
         @post = Post.find(params[:id])
         render json: {status: 'Successful', message: 'Post', data: @post}, status: 200

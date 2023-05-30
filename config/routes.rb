@@ -8,9 +8,11 @@ Rails.application.routes.draw do
       resources :users, only: [:create, :show]
       resources :posts, only: [:create, :index, :show]
       resources :post_comments, only: [:show, :create]
-      resources :post_likes, only: [:show, :create, :destroy]
+      resources :post_likes, only: [:show]
       resources :work_experience, only: [:index, :create]
       get "user/profile", to: 'users#get_profile'
+      get "all/posts", to: 'posts#authenticated_index'
+      post 'posts/:id/likes', to: 'post_likes#create_destroy'
       put "user/update_profile", to: 'users#update_profile'
       get "user/image", to: 'posts#show_image'
       post "user/login", to: 'users#login'
