@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :post_likes, only: [:show, :create, :destroy]
       resources :work_experience, only: [:index, :create]
       get "user/profile", to: 'users#get_profile'
+      put "user/update_profile", to: 'users#update_profile'
+      get "user/image", to: 'posts#show_image'
       post "user/login", to: 'users#login'
       delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
     end
