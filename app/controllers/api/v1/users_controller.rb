@@ -76,6 +76,7 @@ class Api::V1::UsersController < ApplicationController
       company: current_user.company,
       work: current_user.work,
       start_date: current_user.start_date,
+      id: current_user.id
     }
     render json: {status: 'Success', message: 'User details', data: @user},status: 200
   end
