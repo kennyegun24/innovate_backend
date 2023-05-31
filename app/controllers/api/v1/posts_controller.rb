@@ -14,6 +14,11 @@ class Api::V1::PostsController < ApplicationController
         @posts = Post.all.order(created_at: :DESC)
         render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
     end
+    
+    def show
+        @post = Post.find(params[:id])
+        render json: {status: 'Successful', message: 'Post', data: @post}, status: 200
+    end
 
     def authenticated_index
         @posts = Post.all.order(created_at: :DESC)
@@ -31,9 +36,16 @@ class Api::V1::PostsController < ApplicationController
 
     end
 
-    def show
+    def authenticated_show
         @post = Post.find(params[:id])
-        render json: {status: 'Successful', message: 'Post', data: @post}, status: 200
+        @isLiked = @post.post_likes.pluck(:user_id).include?(current_user.id)
+
+        one_post = {
+            **@post.attributes.symbolize_keys,
+            liked: @isLiked
+    }
+        # @post.liked = @isLiked
+        render json: {status: 'Successful', message: 'Post', data: one_post}, status: 200
     end
 
     def post_params

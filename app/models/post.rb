@@ -4,7 +4,7 @@ class Post < ApplicationRecord
     has_many :post_likes
     validates :text, presence: true, length: {minimum: 3, maximum: 1000}
 
-    after_save :UpdatePostCount
+    after_create :UpdatePostCount
     before_save :set_creator_image
     after_destroy :ReducePostCount
 

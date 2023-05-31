@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :work_experience, only: [:index, :create]
       get "user/profile", to: 'users#get_profile'
       get "all/posts", to: 'posts#authenticated_index'
+      get "auth/post/:id", to: 'posts#authenticated_show'
       post 'posts/:id/likes', to: 'post_likes#create_destroy'
       put "user/update_profile", to: 'users#update_profile'
       get "user/image", to: 'posts#show_image'
