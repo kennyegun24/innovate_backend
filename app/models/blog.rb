@@ -5,7 +5,9 @@ class Blog < ApplicationRecord
 
   before_save :update_author_columns
 
-  # validates :articles_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :articles_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :likes_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :comments_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
 
   def update_author_columns

@@ -8,7 +8,10 @@ class Article < ApplicationRecord
   after_save :update_counter
   after_destroy :reduce_counter
 
-  # validates :art_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :title, presence: true, length: { minimum: 2, maximum: 100 }
+  validates :text, presence: true, length: { minimum: 10 }
+  validates :likes_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :comments_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def update_author_columns
     self.author_image = blog.user.image
