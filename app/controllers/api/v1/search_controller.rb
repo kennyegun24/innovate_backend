@@ -4,8 +4,8 @@ class Api::V1::SearchController < ApplicationController
         query = params[:query]
     
         if query.length >= 4
-            @posts = Post.where("LOWER(text) LIKE :query OR LOWER(creator_name) LIKE :query", query: "%#{query}%")
-            @users = User.where("LOWER(name) LIKE :query OR LOWER(user_name) LIKE :query", query: "%#{query}%").select(:id, :name, :image, :profession)
+            @posts = Post.where("LOWER(text) LIKE :query OR LOWER(creator_name) LIKE :query", query: "%#{query.downcase}%")
+            @users = User.where("LOWER(name) LIKE :query OR LOWER(user_name) LIKE :query", query: "%#{query.downcase}%").select(:id, :name, :image, :profession)
 
             @combined_array = [
                 *@posts.map do |post|
