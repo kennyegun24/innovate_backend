@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get "user/image", to: 'posts#show_image'
       post "user/login", to: 'users#login'
       delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
+      get 'search', to: 'search#query_search'
     end
   end
 end
