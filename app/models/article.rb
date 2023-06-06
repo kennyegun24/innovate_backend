@@ -9,7 +9,7 @@ class Article < ApplicationRecord
   after_destroy :reduce_counter
 
   validates :title, presence: true, length: { minimum: 2, maximum: 100 }
-  validates :text, presence: true, length: { minimum: 10 }
+  validates :text, presence: true, length: { minimum: 10, maximum: 5000 }
   validates :likes_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :comments_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
