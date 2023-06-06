@@ -3,7 +3,7 @@ class ArticleComment < ApplicationRecord
   belongs_to :user
 
   before_save :update_author_columns
-  after_save :update_counter
+  after_create :update_counter
   after_destroy :decrease_counter
 
   validates :text, presence: true, length: { minimum: 3, maximum: 300 }

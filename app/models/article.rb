@@ -5,7 +5,7 @@ class Article < ApplicationRecord
   has_many :article_likes
 
   before_save :update_author_columns
-  after_save :update_counter
+  after_create :update_counter
   after_destroy :reduce_counter
 
   validates :title, presence: true, length: { minimum: 2, maximum: 100 }

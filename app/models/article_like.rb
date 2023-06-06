@@ -2,7 +2,7 @@ class ArticleLike < ApplicationRecord
   belongs_to :article
   belongs_to :user
 
-  after_save :update_counter
+  after_create :update_counter
   after_destroy :decrease_counter
 
   def update_counter
