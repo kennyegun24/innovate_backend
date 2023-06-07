@@ -25,6 +25,8 @@ class User < ApplicationRecord
     validates :header, length: {maximum: 100}
     validates :about, length: {maximum: 1000}
     validates :bio, length: {maximum: 500}
+    validates :followers_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    validates :following_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
     after_save :update_posts_with_profile_image
 
