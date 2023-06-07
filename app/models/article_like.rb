@@ -5,6 +5,8 @@ class ArticleLike < ApplicationRecord
   after_create :update_counter
   after_destroy :decrease_counter
 
+  private
+
   def update_counter
     article.increment!(:likes_counter)
     article.blog.increment!(:likes_counter)
