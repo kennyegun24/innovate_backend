@@ -11,8 +11,74 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_05_29_091615) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "article_comments", force: :cascade do |t|
+    t.string "user_name"
+    t.string "user_image"
+    t.string "text"
+    t.bigint "articles_id"
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["articles_id"], name: "index_article_comments_on_articles_id"
+    t.index ["author_id"], name: "index_article_comments_on_author_id"
+  end
+
+  create_table "article_likes", force: :cascade do |t|
+    t.bigint "article_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_article_likes_on_article_id"
+    t.index ["user_id"], name: "index_article_likes_on_user_id"
+  end
+
+  create_table "articles", force: :cascade do |t|
+    t.string "title"
+    t.string "text"
+    t.string "author_name"
+    t.string "author_image"
+    t.integer "likes_counter", default: 0
+    t.integer "comments_counter", default: 0
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "blogs_id", null: false
+    t.index ["blogs_id"], name: "index_articles_on_blogs_id"
+  end
+
+  create_table "blogs", force: :cascade do |t|
+    t.string "author_name"
+    t.string "author_image"
+    t.integer "likes_counter", default: 0
+    t.integer "comments_counter", default: 0
+    t.integer "articles_counter", default: 0
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_blogs_on_author_id"
+  end
+
+  create_table "followers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "follower_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["follower_user_id"], name: "index_followers_on_follower_user_id"
+    t.index ["user_id"], name: "index_followers_on_user_id"
+  end
+
+  create_table "followings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "following_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["following_user_id"], name: "index_followings_on_following_user_id"
+    t.index ["user_id"], name: "index_followings_on_user_id"
+  end
 
   create_table "post_comments", force: :cascade do |t|
     t.string "commentor_name"
@@ -87,6 +153,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_29_091615) do
     t.index ["user_id"], name: "index_work_experiences_on_user_id"
   end
 
+  add_foreign_key "article_comments", "articles", column: "articles_id"
+  add_foreign_key "article_comments", "users", column: "author_id"
+  add_foreign_key "article_likes", "articles"
+  add_foreign_key "article_likes", "users"
+  add_foreign_key "articles", "blogs", column: "blogs_id"
+  add_foreign_key "blogs", "users", column: "author_id"
+  add_foreign_key "followers", "users"
+  add_foreign_key "followers", "users", column: "follower_user_id"
+  add_foreign_key "followings", "users"
+  add_foreign_key "followings", "users", column: "following_user_id"
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"
   add_foreign_key "post_likes", "posts"
