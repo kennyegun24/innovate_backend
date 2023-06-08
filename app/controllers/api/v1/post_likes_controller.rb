@@ -1,31 +1,29 @@
 class Api::V1::PostLikesController < ApplicationController
-    def create
-        @likes = PostLike.new(likes_params)
-        @likes.user = current_user
 
-        if @likes.save
-            render json: {status: 'Successful', message: 'likes added'}, status: 201
+    def create_destroy
+        @post = Post.find(params[:id])
+        @likes = @post.post_likes.find_by(user: current_user.id)
+
+        if @likes
+            if @likes.destroy
+                render json: {message: 'Deleted', status: 'Success'}
+            else
+                render json: { status: 'Failure', message: 'Failed to unlike post' }, status: 422
+            end
         else
-            render json: {status: 'Failure', message: @likes.errors.full_messages}, status: 422
-        end
-    end
+            @likes = @post.post_likes.new(user: current_user)
+            @likes.user = current_user
 
-    def destroy
-        @likes = PostLike.find(params[:id])
-
-        if @likes.destroy
-            render json: { status: 'Success', message: 'likes deleted' }, status: 200
-        else
-            render json: { status: 'Failure', message: 'Failed to delete likes' }, status: 422
+            if @likes.save
+                render json: {status: 'Successful', message: 'likes added'}, status: 201
+            else
+                render json: {status: 'Failure', message: @likes.errors.full_messages}, status: 422
+            end
         end
     end
 
     def show
         @likes = PostLike.where(post_id: params[:id])
         render json: { status: 'Success', message: 'Successful', data: @likes }, status: 200
-    end
-
-    def likes_params
-        params.require(:post_like).permit( :post_id)
     end
 end
