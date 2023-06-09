@@ -9,7 +9,8 @@ Rails.application.routes.draw do
       resources :posts, only: [:destroy, :create, :index, :show]
       resources :post_comments, only: [:show, :create]
       resources :post_likes, only: [:show]
-      resources :work_experience, only: [:index, :create]
+      resources :work_experience, only: [:index, :create, :update]
+      resources :unauths, only:[:show]
       get "user/profile", to: 'users#get_profile'
       get "all/posts", to: 'posts#authenticated_index'
       get "auth/post/:id", to: 'posts#authenticated_show'
@@ -19,6 +20,7 @@ Rails.application.routes.draw do
       put "user/update_profile", to: 'users#update_profile'
       get "user/image", to: 'posts#show_image'
       post "user/login", to: 'users#login'
+      delete "user/delete", to: 'users#destroy'
       delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
       get 'search', to: 'search#query_search'
     end
