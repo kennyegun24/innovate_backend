@@ -1,6 +1,6 @@
-class FollowerController < ApplicationController
+class Api::V1::FollowersController < ApplicationController
   def create
-    @follower = Follower.create(user_id: follower_params, follower_user: current_user)
+    @follower = Follower.create(user_id: params[:user_id], follower_user: current_user)
 
     if @follower.save
       render json: { status: 'Success', message: 'You have successfully followed' }, status: 201

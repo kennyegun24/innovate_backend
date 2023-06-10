@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'follower/new'
-  get 'follower/create'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -23,6 +21,8 @@ Rails.application.routes.draw do
       post "user/login", to: 'users#login'
       delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
       get 'search', to: 'search#query_search'
+
+      resources :followers, only: %i[create]
     end
   end
 end
