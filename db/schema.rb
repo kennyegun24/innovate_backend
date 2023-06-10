@@ -137,6 +137,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
     t.datetime "updated_at", null: false
     t.integer "followers_count", default: 0
     t.integer "following_count", default: 0
+    t.string "phoneNumber"
+    t.string "school"
+    t.string "company"
+    t.string "work"
+    t.string "start_date"
   end
 
   create_table "work_experiences", force: :cascade do |t|

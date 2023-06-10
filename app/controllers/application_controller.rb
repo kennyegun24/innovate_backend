@@ -2,9 +2,10 @@ class ApplicationController < ActionController::API
         before_action :authenticate_request
     
         SECRET_KEY = Rails.application.secret_key_base. to_s
+        TOKEN_EXPIRATION = 120.hours.to_i
     
       def encode_token(payload)
-        # payload[:exp] = exp.to_i
+        payload[:exp] = Time.now.to_i + TOKEN_EXPIRATION
         JWT.encode(payload, SECRET_KEY)
       end
     
@@ -19,6 +20,9 @@ class ApplicationController < ActionController::API
         begin
           decoded_token = decode_token(token)
           @current_user_id = decoded_token['user_id']
+          if decoded_token.present? && decoded_token[:exp] < Time.now.to_i
+            render json: { status: 'ERROR', message: 'Token has expired' }, status: :unauthorized
+          end
         rescue JWT::DecodeError
           render json: { status: 'ERROR', message: 'Invalid token' }, status: :unauthorized
         end

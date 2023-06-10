@@ -12,7 +12,7 @@ class Api::V1::WorkExperienceController < ApplicationController
     def index
         @user_work = current_user.work_experiences.order(start_date: :desc)
 
-        render json: {status: 'Successful', message: 'Work Experience Added', data: @user_work}, status: 201
+        render json: {status: 'Successful', message: 'Work Experience', data: @user_work}, status: 200
     end
 
     def work_params
