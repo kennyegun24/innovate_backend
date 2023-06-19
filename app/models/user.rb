@@ -13,10 +13,10 @@ class User < ApplicationRecord
 
     # FOllowers relationship
     has_many :followers, foreign_key: :user_id, class_name: 'Follower'
-    has_many :followed_users, through: :followers, source: :follower_user
+    has_many :user_followers, through: :followers, source: :follower_user
 
     has_many :followings, foreign_key: :user_id, class_name: 'Following'
-    has_many :following_users, through: :followings, source: :following_user
+    has_many :user_following, through: :followings, source: :following_user
 
     validates :name, presence: true
     validates :user_name, presence: true, uniqueness: true
@@ -25,6 +25,8 @@ class User < ApplicationRecord
     validates :header, length: {maximum: 100}
     validates :about, length: {maximum: 1000}
     validates :bio, length: {maximum: 500}
+    validates :followers_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    validates :following_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
     after_save :update_posts_with_profile_image
 

@@ -8,6 +8,8 @@ class ArticleComment < ApplicationRecord
 
   validates :text, presence: true, length: { minimum: 3, maximum: 300 }
 
+  private
+
   def update_author_columns
     self.user_image = user.image
     self.user_name = user.name

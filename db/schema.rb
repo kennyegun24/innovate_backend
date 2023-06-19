@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_01_084336) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_084336) do
     t.bigint "follower_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["follower_user_id", "user_id"], name: "index_followers_on_follower_user_id_and_user_id", unique: true
     t.index ["follower_user_id"], name: "index_followers_on_follower_user_id"
     t.index ["user_id"], name: "index_followers_on_user_id"
   end
@@ -75,6 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_084336) do
     t.bigint "following_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["following_user_id", "user_id"], name: "index_followings_on_following_user_id_and_user_id", unique: true
     t.index ["following_user_id"], name: "index_followings_on_following_user_id"
     t.index ["user_id"], name: "index_followings_on_user_id"
   end
@@ -133,6 +135,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_084336) do
     t.string "website3"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "followers_count", default: 0
+    t.integer "following_count", default: 0
     t.string "phoneNumber"
     t.string "school"
     t.string "company"

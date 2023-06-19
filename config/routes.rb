@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       delete "user/delete", to: 'users#destroy'
       delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
       get 'search', to: 'search#query_search'
+
+      resources :followers, only: %i[create]
     end
   end
 end
