@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
-    skip_before_action :authenticate_request, only: %i[create login show]
+    skip_before_action :authenticate_request, only: %i[create login]
 
-  def create
+  def create #api/v1/users
     @user = User.create(user_params)
 
     if @user.save
@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def login
+  def login #api/v1/user/login
     @user = User.find_by(email: params[:email])
 
     if @user&.authenticate(params[:password])
@@ -23,39 +23,45 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def show
+  ## Show other user details for authenticated users
+  def show #api/v1/users/:id
     @user = User.find(params[:id])
 
-    @user_details = {
-          name: @user.name,
-          username: @user.user_name,
-          email: @user.email,
-          image: @user.image,
-          header: @user.header,
-          bio: @user.bio,
-          about: @user.about,
-          profession: @user.profession,
-          location: @user.location,
-          blogs_count: @user.blogs_count,
-          posts_count: @user.posts_count,
-          website1: @user.website1,
-          website2: @user.website2,
-          website3: @user.website3,
-          phoneNumber: @user.phoneNumber,
-          school: @user.school,
-          company: @user.company,
-          work: @user.work,
-          start_date: @user.start_date,
-      }
+    @isFollowed = @user.followers.pluck(:follower_user_id).include?(current_user.id)
 
-    if @user
-      render json: {status: 'Success', message: 'User', data: @user_details}, status: 200
-    else
-      render json: {status: 'Fail', message: 'Wrong Details'}, status: 422
-    end
+    @user_details = {
+      name: @user.name,
+      username: @user.user_name,
+      email: @user.email,
+      image: @user.image,
+      header: @user.header,
+      bio: @user.bio,
+      about: @user.about,
+      id: @user.id,
+      profession: @user.profession,
+      location: @user.location,
+      blogs_count: @user.blogs_count,
+      posts_count: @user.posts_count,
+      website1: @user.website1,
+      website2: @user.website2,
+      website3: @user.website3,
+      phoneNumber: @user.phoneNumber,
+      school: @user.school,
+      company: @user.company,
+      work: @user.work,
+      start_date: @user.start_date,
+    }
+
+    final_obj = {
+      **@user_details.symbolize_keys,
+      isFollowed: @isFollowed
+    }
+
+    render json: {status: 'Successful', message: 'user', data: final_obj}, status: 200
   end
 
-  def get_profile
+  ## Show other user details
+  def get_profile #api/v1/user/profile
     @user = {
       name: current_user.name,
       username: current_user.user_name,
@@ -81,7 +87,8 @@ class Api::V1::UsersController < ApplicationController
     render json: {status: 'Success', message: 'User details', data: @user},status: 200
   end
 
-  def update_profile
+  ## Update user profile
+  def update_profile #api/v1/user/update_profile
     @user_update = current_user.update(update_params)
 
     if @user_update
@@ -89,6 +96,11 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { status: 'Error', message: @user_update.errors.full_messages }, status: 422
     end
+  end
+
+  # method to delete user
+  def destroy
+    current_user.destroy
   end
 
   def user_params

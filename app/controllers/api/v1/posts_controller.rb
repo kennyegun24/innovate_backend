@@ -10,16 +10,19 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  # All posts for a non authenticated user
   def index
     @posts = Post.all.order(created_at: :DESC)
     render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
   end
   
+  # Post details to be displayed for an un-authenticated user
   def show
     @post = Post.find(params[:id])
     render json: {status: 'Successful', message: 'Post', data: @post}, status: 200
   end
 
+  # Lists of posts to be displayed when there iis an authenticated user
   def authenticated_index
     @posts = Post.all.order(created_at: :DESC)
 
@@ -36,22 +39,27 @@ class Api::V1::PostsController < ApplicationController
 
   end
 
+  # Post details to be displayed when there  an authenticated user
   def authenticated_show
     @post = Post.find(params[:id])
     @isLiked = @post.post_likes.pluck(:user_id).include?(current_user.id)
 
+    @isFollowed = @post.author.followers.pluck(:follower_user_id).include?(current_user.id)
     one_post = {
       **@post.attributes.symbolize_keys,
-      liked: @isLiked
+      liked: @isLiked,
+      isFollowed: @isFollowed
     }
     render json: {status: 'Successful', message: 'Post', data: one_post}, status: 200
   end
 
+  # All posts for the authenticated user
   def current_user_posts
     @posts = current_user.posts.includes(:post_likes).order(created_at: :desc)
     render json: {message: 'Curren user posts', status: 'Successful', data: @posts}, status: 200
   end
 
+  # All posts for other user
   def other_users_posts
     @user = User.find(params[:id])
     @posts = @user.posts.all.order(created_at: :DESC)
