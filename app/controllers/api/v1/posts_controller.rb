@@ -63,7 +63,7 @@ class Api::V1::PostsController < ApplicationController
   def other_users_posts
     @user = User.find(params[:id])
     @posts = @user.posts.all.order(created_at: :DESC)
-    render json: {message: 'User posts', status: 'Successful', data: @posts}, status: 200
+    render json: {message: 'User posts', status: 'Successful', data: @posts, id: @user.id}, status: 200
   end
 
   def destroy

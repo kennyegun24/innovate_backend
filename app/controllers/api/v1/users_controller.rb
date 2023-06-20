@@ -50,6 +50,7 @@ class Api::V1::UsersController < ApplicationController
       company: @user.company,
       work: @user.work,
       start_date: @user.start_date,
+      followers_count:@user.followers_count
     }
 
     final_obj = {
@@ -82,7 +83,8 @@ class Api::V1::UsersController < ApplicationController
       company: current_user.company,
       work: current_user.work,
       start_date: current_user.start_date,
-      id: current_user.id
+      id: current_user.id,
+      followers_count:current_user.followers_count
     }
     render json: {status: 'Success', message: 'User details', data: @user},status: 200
   end

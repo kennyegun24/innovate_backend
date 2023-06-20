@@ -1,4 +1,5 @@
 class Api::V1::WorkExperienceController < ApplicationController
+    skip_before_action :authenticate_request, only: %i[other_user_experience]
     def create
         @WorkExp = current_user.work_experiences.new(work_params)
 
@@ -23,6 +24,12 @@ class Api::V1::WorkExperienceController < ApplicationController
         else
             render json: {status: 422, message: 'Error'}, status: 422
         end
+    end
+
+    def other_user_experience
+        @experience = WorkExperience.where(users: params[:id])
+
+        render json: {status: 201, message: 'Work experience', data: @experience}, status: 200
     end
 
     def work_params
