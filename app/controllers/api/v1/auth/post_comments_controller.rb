@@ -1,4 +1,4 @@
-class Api::V1::PostCommentsController < ApplicationController
+class Api::V1::Auth::PostCommentsController < ApplicationController
     def create
         @comment = PostComment.new(comment_params)
         @comment.user = current_user

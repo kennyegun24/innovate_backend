@@ -5,26 +5,34 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api do
     namespace :v1 do
-      resources :users, only: [:create, :show]
-      resources :posts, only: [:destroy, :create, :index, :show]
-      resources :post_comments, only: [:show, :create]
-      resources :post_likes, only: [:show]
-      resources :work_experience, only: [:index, :create, :update]
-      resources :unauths, only:[:show]
-      get "user/profile", to: 'users#get_profile'
-      get "all/posts", to: 'posts#authenticated_index'
-      get "auth/post/:id", to: 'posts#authenticated_show'
-      get "auth/user/posts", to: 'posts#current_user_posts'
-      get "user/:id/posts", to: 'posts#other_user_posts'
-      post 'posts/:id/likes', to: 'post_likes#create_destroy'
-      put "user/update_profile", to: 'users#update_profile'
-      get "user/image", to: 'posts#show_image'
-      post "user/login", to: 'users#login'
-      delete "user/delete", to: 'users#destroy'
-      delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
+      get 'user/:id/experience', to: 'work_experience#other_user_experience'
+      resources :authentication, only: [:create]
+      get "authenticaation/login", to: 'login#authentication'
+      get 'user/:id/followers', to: 'followers#other_user_followers'
       get 'search', to: 'search#query_search'
 
-      resources :followers, only: %i[create]
+      namespace :auth do
+        resources :post_comments, only: [:index, :create, :destroy]
+        resources :posts, only: [:destroy, :create, :index, :show]
+        resources :users_details, only: [:show]
+        resources :follows, only:[:create, :index]
+        get "user/posts", to: 'posts#current_user_posts'
+        get "user/:id/posts", to: 'posts#other_users_posts'
+        get "post/:id/like", to: 'post_likes#like_unlike'
+        put "user/update_profile", to: 'users_details#update_profile'
+        get "user/profile", to: 'users_details#get_profile'
+        get 'user/:id/experience', to: 'work_experience#index'
+        post 'user/experience', to: 'work_experience#create'
+        put 'user/experience/:id', to: 'work_experience#update'
+        delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
+      end
+
+      namespace :unauth do
+        resources :posts, only: [:index, :show]
+        resources :user_details, only: [:show]
+        get 'user/:id/posts', to: 'posts#other_user_posts'
+      end
+
     end
   end
 end

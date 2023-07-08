@@ -1,6 +1,6 @@
-class Api::V1::PostLikesController < ApplicationController
+class Api::V1::Auth::PostLikesController < ApplicationController
 
-    def create_destroy
+    def like_unlike
         @post = Post.find(params[:id])
         @likes = @post.post_likes.find_by(user: current_user.id)
 

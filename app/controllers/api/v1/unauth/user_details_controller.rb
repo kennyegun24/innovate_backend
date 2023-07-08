@@ -1,4 +1,4 @@
-class Api::V1::UnauthsController < ApplicationController
+class Api::V1::Unauth::UserDetailsController < ApplicationController
     skip_before_action :authenticate_request, only: %i[show]
 
   ## Show current user details in user profile

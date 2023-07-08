@@ -1,30 +1,6 @@
-class Api::V1::UsersController < ApplicationController
-    skip_before_action :authenticate_request, only: %i[create login]
-
-  def create #api/v1/users
-    @user = User.create(user_params)
-
-    if @user.save
-      token = encode_token(user_id: @user.id)
-      render json: {status: 'success', message: 'User created', data: {token: token }}, status: 201
-    else
-      render json: { status: 'Error', message: @user.errors.full_messages }, status: 422
-    end
-  end
-
-  def login #api/v1/user/login
-    @user = User.find_by(email: params[:email])
-
-    if @user&.authenticate(params[:password])
-      token = encode_token(user_id: @user.id)
-      render json: {status: 'Success', message: 'Logged in successfully', data: {token: token, user_id: @user.id} },status: 200
-    else
-      render json: { status: 'Error', message: 'Invalid Email or Password' },status: 401
-    end
-  end
-
+class Api::V1::Auth::UserDetailsController < ApplicationController
   ## Show other user details for authenticated users
-  def show #api/v1/users/:id
+  def show
     @user = User.find(params[:id])
 
     @isFollowed = @user.followers.pluck(:follower_user_id).include?(current_user.id)
@@ -50,6 +26,7 @@ class Api::V1::UsersController < ApplicationController
       company: @user.company,
       work: @user.work,
       start_date: @user.start_date,
+      followers_count:@user.followers_count
     }
 
     final_obj = {
@@ -60,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
     render json: {status: 'Successful', message: 'user', data: final_obj}, status: 200
   end
 
-  ## Show other user details
+  ## Show current user details
   def get_profile #api/v1/user/profile
     @user = {
       name: current_user.name,
@@ -82,7 +59,8 @@ class Api::V1::UsersController < ApplicationController
       company: current_user.company,
       work: current_user.work,
       start_date: current_user.start_date,
-      id: current_user.id
+      id: current_user.id,
+      followers_count:current_user.followers_count
     }
     render json: {status: 'Success', message: 'User details', data: @user},status: 200
   end
@@ -103,9 +81,6 @@ class Api::V1::UsersController < ApplicationController
     current_user.destroy
   end
 
-  def user_params
-    params.require(:user).permit(:name, :user_name, :email, :password)
-  end
 
   def update_params
     params.require(:user).permit(:name, :header, :bio, :about, :profession, :location, :website1, :website2, :website3, :phoneNumber, :school, :company, :work, :start_date)

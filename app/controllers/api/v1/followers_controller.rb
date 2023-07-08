@@ -1,25 +1,9 @@
 class Api::V1::FollowersController < ApplicationController
-  def create
-    unless current_user.user_following.exists?(params[:user_id])
-      @follower = Follower.create(user_id: params[:user_id], follower_user: current_user)
+    skip_before_action :authenticate_request, only: %i[other_user_followers]
 
-      if @follower.save
-        render json: { status: 'Success', message: 'You have successfully followed' }, status: 201
-      else
-        render json: { status: 'Error', message: @follower.errors.full_messages }, status: 422
-      end
-
-    else
-      @follow = Follower.where(user_id: params[:user_id], follower_user_id: current_user.id)
-
-      @follow.destroy
-      render json: { message: 'Unfollowed' }
-    end
-  end
-
-  private
-
-  def follower_params
-    params.require(:follower).permit(:user_id)
+  def other_user_followers #other user followers user/:id/followers
+    # @user = Follower.where(user_id: params[:id])
+    @user = User.find(params[:id]).user_followers.select(:id, :name,:header,:followers_count, :profession,:image).order(created_at: :desc)
+    render json: {status: 'Success', data: @user}, status:200
   end
 end
