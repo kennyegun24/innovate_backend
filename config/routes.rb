@@ -7,20 +7,20 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
-      get "authenticaation/login", to: 'login#authentication'
+      post "authenticaation/login", to: 'authentication#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
       get 'search', to: 'search#query_search'
 
       namespace :auth do
         resources :post_comments, only: [:index, :create, :destroy]
         resources :posts, only: [:destroy, :create, :index, :show]
-        resources :users_details, only: [:show]
+        resources :user_details, only: [:show]
         resources :follows, only:[:create, :index]
         get "user/posts", to: 'posts#current_user_posts'
         get "user/:id/posts", to: 'posts#other_users_posts'
-        get "post/:id/like", to: 'post_likes#like_unlike'
-        put "user/update_profile", to: 'users_details#update_profile'
-        get "user/profile", to: 'users_details#get_profile'
+        post "post/:id/like", to: 'post_likes#like_unlike'
+        put "user/update_profile", to: 'user_details#update_profile'
+        get "user/profile", to: 'user_details#get_profile'
         get 'user/:id/experience', to: 'work_experience#index'
         post 'user/experience', to: 'work_experience#create'
         put 'user/experience/:id', to: 'work_experience#update'
