@@ -29,12 +29,19 @@ class User < ApplicationRecord
     validates :following_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
     after_save :update_posts_with_profile_image
+    after_save :update_name
 
     private
-  
+
     def update_posts_with_profile_image
       if saved_change_to_image?
         self.posts.update_all(creator_image: image)
+      end
+    end
+
+    def update_name
+      if saved_change_to_name?
+        self.posts.update_all(creator_name: name)
       end
     end
 end

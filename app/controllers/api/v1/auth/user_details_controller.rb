@@ -83,6 +83,6 @@ class Api::V1::Auth::UserDetailsController < ApplicationController
 
 
   def update_params
-    params.require(:user).permit(:name, :header, :bio, :about, :profession, :location, :website1, :website2, :website3, :phoneNumber, :school, :company, :work, :start_date)
+    params.require(:user_detail).permit(:name, :header, :bio, :about, :profession, :location, :website1, :website2, :website3, :phoneNumber, :school, :company, :work, :start_date)
   end
 end

@@ -21,8 +21,8 @@ Rails.application.routes.draw do
         post "post/:id/like", to: 'post_likes#like_unlike'
         put "user/update_profile", to: 'user_details#update_profile'
         get "user/profile", to: 'user_details#get_profile'
-        get 'user/:id/experience', to: 'work_experience#index'
-        post 'user/experience', to: 'work_experience#create'
+        get 'user/experience', to: 'work_experience#index'
+        post 'user/experience/new', to: 'work_experience#create'
         put 'user/experience/:id', to: 'work_experience#update'
         delete "posts/:id/comments/:comment_id", to: "post_comments#destroy"
       end
