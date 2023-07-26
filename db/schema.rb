@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_25_081228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "applied_jobs", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_applied_jobs_on_job_id"
+    t.index ["user_id"], name: "index_applied_jobs_on_user_id"
+  end
 
   create_table "article_comments", force: :cascade do |t|
     t.string "user_name"
@@ -61,6 +70,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
     t.index ["author_id"], name: "index_blogs_on_author_id"
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "email"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "company_details", force: :cascade do |t|
+    t.string "company_name"
+    t.string "capacity"
+    t.string "creation_date"
+    t.string "about"
+    t.integer "post_count"
+    t.integer "followers_count"
+    t.integer "open_jobs"
+    t.string "company_image"
+    t.bigint "company_id", null: false
+    t.string "header"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_details_on_company_id"
+  end
+
   create_table "followers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "follower_user_id", null: false
@@ -79,6 +111,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
     t.index ["following_user_id", "user_id"], name: "index_followings_on_following_user_id_and_user_id", unique: true
     t.index ["following_user_id"], name: "index_followings_on_following_user_id"
     t.index ["user_id"], name: "index_followings_on_user_id"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.string "company_name"
+    t.string "company_image"
+    t.string "description"
+    t.string "title"
+    t.string "expiry_date"
+    t.string "location"
+    t.string "experience_level"
+    t.integer "no_of_applicants"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_jobs_on_company_id"
   end
 
   create_table "post_comments", force: :cascade do |t|
@@ -156,16 +203,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_130947) do
     t.index ["user_id"], name: "index_work_experiences_on_user_id"
   end
 
+  add_foreign_key "applied_jobs", "jobs"
+  add_foreign_key "applied_jobs", "users"
   add_foreign_key "article_comments", "articles", column: "articles_id"
   add_foreign_key "article_comments", "users", column: "author_id"
   add_foreign_key "article_likes", "articles"
   add_foreign_key "article_likes", "users"
   add_foreign_key "articles", "blogs", column: "blogs_id"
   add_foreign_key "blogs", "users", column: "author_id"
+  add_foreign_key "company_details", "companies"
   add_foreign_key "followers", "users"
   add_foreign_key "followers", "users", column: "follower_user_id"
   add_foreign_key "followings", "users"
   add_foreign_key "followings", "users", column: "following_user_id"
+  add_foreign_key "jobs", "companies"
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"
   add_foreign_key "post_likes", "posts"
