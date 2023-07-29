@@ -5,6 +5,7 @@ class User < ApplicationRecord
     has_many :post_comments
     has_many :post_likes
     has_many :work_experiences
+    has_many :applied_jobs
 
     has_many :blogs
     has_many :articles

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_25_081228) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_28_114547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,9 +72,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_25_081228) do
 
   create_table "companies", force: :cascade do |t|
     t.string "email"
-    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
   end
 
   create_table "company_details", force: :cascade do |t|
@@ -82,9 +82,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_25_081228) do
     t.string "capacity"
     t.string "creation_date"
     t.string "about"
-    t.integer "post_count"
-    t.integer "followers_count"
-    t.integer "open_jobs"
+    t.integer "post_count", default: 0
+    t.integer "followers_count", default: 0
+    t.integer "open_jobs", default: 0
     t.string "company_image"
     t.bigint "company_id", null: false
     t.string "header"
@@ -121,7 +121,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_25_081228) do
     t.string "expiry_date"
     t.string "location"
     t.string "experience_level"
-    t.integer "no_of_applicants"
+    t.integer "no_of_applicants", default: 0
     t.bigint "company_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
