@@ -13,9 +13,7 @@ class Follower < ApplicationRecord
   end
 
   def remove_following
-    follow = Following.where(user: follower_user, following_user: user)
-    follow.each { |foll| Following.destroy(foll.id) }
-
+    Following.find_by(user: follower_user, following_user: user)&.destroy
     user.decrement!(:followers_count)
   end
 end
