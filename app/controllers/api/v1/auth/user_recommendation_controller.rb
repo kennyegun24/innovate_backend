@@ -16,12 +16,13 @@ class Api::V1::Auth::UserRecommendationController < ApplicationController
                               .first(20)
                               .map(&:first)
 
-    find_users = User.where(
-      "bio ILIKE ANY (array[?]) OR about ILIKE ANY (array[?]) OR profession ILIKE ANY (array[?])",
-      top_profile_words.map { |word| "%#{word}%" },
-      top_profile_words.map { |word| "%#{word}%" },
-      top_profile_words.map { |word| "%#{word}%" }
-    )
+    find_users = User.where.not(id: current_user.id)
+      .where(
+        "bio ILIKE ANY (array[?]) OR about ILIKE ANY (array[?]) OR profession ILIKE ANY (array[?])",
+        top_profile_words.map { |word| "%#{word}%" },
+        top_profile_words.map { |word| "%#{word}%" },
+        top_profile_words.map { |word| "%#{word}%" }
+      )
     .paginate(page: page_number, per_page: per_page).select(:name, :header, :image, :id)
     render json: find_users
   end
