@@ -13,6 +13,8 @@ class Api::V1::Auth::AlgosController < ApplicationController
     #2 Combine and count word occurrences
     all_words = (user_posts + user_liked_and_commented_posts.pluck(:text)).join(' ').split
 
+    all_words = all_words - exempted_words
+
     # This hash method is used to create a new hash for each word
     word_occurrences = Hash.new(0)
 

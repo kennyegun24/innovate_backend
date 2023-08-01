@@ -59,7 +59,27 @@ class ApplicationController < ActionController::API
           'am',
           'full',
           'fully',
-          'began'
+          'began',
+          'that',
+          'friend',
+          'more',
+          'that',
+          'this',
+          'they',
+          'them',
+          'people',
+          'assist',
+          'people',
+          'individual',
+          'get',
+          'like',
+          'what',
+          'feel',
+          'it',
+          'nothing',
+          'fill',
+          'with',
+          'few'
         ]
         return @exempted_words
       end
