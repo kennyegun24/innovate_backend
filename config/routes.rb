@@ -16,6 +16,8 @@ Rails.application.routes.draw do
         resources :posts, only: [:destroy, :create, :index, :show]
         resources :user_details, only: [:show]
         resources :follows, only:[:create, :index]
+        resources :user_recommendation, only:[ :index]
+        resources :algos, only:[ :index]
         get "user/posts", to: 'posts#current_user_posts'
         get "user/:id/posts", to: 'posts#other_users_posts'
         post "post/:id/like", to: 'post_likes#like_unlike'
