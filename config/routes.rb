@@ -3,13 +3,14 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  # localhost:4000/api/v1/auth/posts
   namespace :api do
     namespace :v1 do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
-      post "authenticaation/login", to: 'authentication#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
       get 'search', to: 'search#query_search'
+      post "authentication/login", to: 'authentication#login'
 
       namespace :auth do
         resources :post_comments, only: [:index, :create, :destroy]
