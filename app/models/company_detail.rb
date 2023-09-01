@@ -8,6 +8,6 @@ class CompanyDetail < ApplicationRecord
   validates :post_count, presence: true,numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validates :followers_count, presence: true,numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validates :open_jobs, presence: true
-  validates :header, presence: true, length: {maximum: 20}
+  validates :header, presence: true, length: {maximum: 40}
 
 end
