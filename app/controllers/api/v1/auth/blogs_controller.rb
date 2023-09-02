@@ -1,6 +1,7 @@
 class Api::V1::Auth::BlogsController < ApplicationController
   # Create method to allow user create a blog account
   # Create method to delete articles
+  # show all current user articles
 
   def create
     # @article = current_user.blog.build(article_params)
@@ -34,8 +35,24 @@ class Api::V1::Auth::BlogsController < ApplicationController
     end
   end
 
+  # list all current user articles
   def index
+    @articles = current_user.blog.articles.map do |article|
+    # Truncate the title to a maximum of 20 characters
+      truncated_title = article.title.truncate(20, omission: '...')
 
+      # Create a new hash with the truncated title
+      {
+        id: article.id,
+        title: truncated_title,
+        blogs_id: article.blogs_id,
+        image: article.image,
+        created_at: article.created_at,
+        likes_counter: article.likes_counter,
+        comments_counter: article.comments_counter,
+      }
+    end
+    render json: { data: @articles }
   end
 
   def article_params
