@@ -13,7 +13,7 @@ class Api::V1::Auth::PostsController < ApplicationController
   # Lists of posts to be displayed when there iis an authenticated user
   def index
     page_number = params[:page] || 1
-    per_page = 30
+    per_page = 20
 
     # 1. Minimize database queries
     current_user_data = current_user.as_json(include: [:followings, :post_likes, :post_comments, :posts])
@@ -75,12 +75,12 @@ class Api::V1::Auth::PostsController < ApplicationController
     final_recommended_posts = (recommended_posts + follower_users_posts + suggested_posts).sort_by { |post| [-post.created_at.to_i, -post.likes_count] }
 
     finished_recommended_posts = final_recommended_posts.map do |post|
-    {
-      **post.attributes.symbolize_keys,
-      liked: current_user_likes.include?(post.id)
-    }
-  end
-  puts(finished_recommended_posts.count)
+      {
+        **post.attributes.symbolize_keys,
+        liked: current_user_likes.include?(post.id)
+      }
+    end
+    puts(finished_recommended_posts.count)
     render json: finished_recommended_posts
   end
 

@@ -21,10 +21,10 @@ class Article < ApplicationRecord
   end
 
   def update_counter
-    blog.increment!(:articles_counter)
+    blog.update(articles_counter: blog.articles.count)
   end
 
   def reduce_counter
-    blog.decrement!(:articles_counter)
+    blog.update(articles_counter: blog.articles.count)
   end
 end

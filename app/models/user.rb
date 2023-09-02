@@ -7,7 +7,7 @@ class User < ApplicationRecord
     has_many :work_experiences
     has_many :applied_jobs
 
-    has_many :blogs
+    has_one :blog, foreign_key: 'author_id', class_name: 'Blog'
     has_many :articles
     has_many :article_comments
     has_many :article_likes

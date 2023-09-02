@@ -2,7 +2,9 @@ class Api::V1::Unauth::PostsController < ApplicationController
     skip_before_action :authenticate_request, only: %i[show index other_user_posts]
     # All posts for a non authenticated user
   def index
-    @posts = Post.all.order(created_at: :DESC)
+    page_number = params[:page] || 1
+    per_page = 30
+    @posts = Post.all.order(created_at: :DESC).paginate(page: page_number, per_page: per_page)
     render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
   end
 
