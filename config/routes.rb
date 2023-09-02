@@ -8,9 +8,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
+      resources :blogs, only: [:index, :show]
+      post "authentication/login", to: 'authentication#login'
+      resources :companies, only: [:create]
+      post "companies/login", to: 'companies#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
       get 'search', to: 'search#query_search'
-      post "authentication/login", to: 'authentication#login'
 
       namespace :auth do
         resources :post_comments, only: [:index, :create, :destroy]
@@ -19,6 +22,7 @@ Rails.application.routes.draw do
         resources :follows, only:[:create, :index]
         resources :user_recommendation, only:[ :index]
         resources :algos, only:[ :index]
+        resources :blogs, only:[:create, :destroy]
         get "user/posts", to: 'posts#current_user_posts'
         get "user/:id/posts", to: 'posts#other_users_posts'
         post "post/:id/like", to: 'post_likes#like_unlike'
