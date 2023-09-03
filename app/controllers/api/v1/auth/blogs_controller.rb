@@ -55,17 +55,38 @@ class Api::V1::Auth::BlogsController < ApplicationController
     render json: { data: @articles }
   end
 
+  # show general blogs to current user
+  def show_blogs
+    page_number = params[:page] || 2
+    per_page = 20
+
+    # 1. Minimize database queries
+    current_user_data = current_user.as_json(include: { blog: { include: :articles }, posts: {} })
+    extract_user_posts = current_user_data['posts'].map { |f| f['text'] }
+    current_user_blogs = current_user_data['blog']["articles"].map { |pl| pl['title'] }
+
+    word_occurrences = Hash.new(0)
+    joined_posts_article_words = extract_user_posts + current_user_blogs
+
+    joined_posts_article_words.each do |word|
+      word.split.each  { |word| word_occurrences[word.downcase] += 1 }
+    end
+
+    top_words = word_occurrences.reject { |word, _| word.length <= 3 }
+                                .sort_by { |_, count| -count }
+                                .first(10)
+                                .map(&:first)
+
+    recommended_articles = Article.where("title ILIKE ANY (array[?]) OR text ILIKE ANY (array[?])",
+                                          top_words.map { |word| "%#{word}%" },
+                                          top_words.map { |word| "%#{word}%" },
+                                        )
+                                    .order(created_at: :desc, likes_counter: :desc)
+                                    .paginate(page: page_number, per_page: per_page)
+    render json: recommended_articles
+  end
+
   def article_params
     params.require(:article).permit(:title, :text, :author_name, :image)
   end
 end
-
-# {
-#   "status": "success",
-#   "message": "User created",
-#   "data": {
-#     "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNTQsImV4cCI6MTY5NDEwMTM4OH0.xL5JlRq04adiu4p769fBMgkimHhnGDjZCXV_R_v4plY",
-#     "use_id": 254,
-#     "type": "individual"
-#   }
-# }
