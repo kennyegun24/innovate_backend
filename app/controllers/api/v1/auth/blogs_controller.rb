@@ -37,7 +37,7 @@ class Api::V1::Auth::BlogsController < ApplicationController
 
   # list all current user articles
   def index
-    @articles = current_user.blog.articles.map do |article|
+    @articles = current_user.blog.articles.order(likes_counter: :desc).map do |article|
     # Truncate the title to a maximum of 20 characters
       truncated_title = article.title.truncate(20, omission: '...')
 
