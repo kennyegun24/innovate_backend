@@ -2,7 +2,9 @@ class Api::V1::BlogsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index]
 
   def index
-      @articles = Article.all
+    page_number = params[:page] || 2
+    per_page = 10
+      @articles = Article.all.order(likes_counter: :desc).paginate(page: page_number, per_page: per_page)
       render json: { message: 'User does not exist', data:@articles }
   end
 
