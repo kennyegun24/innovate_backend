@@ -22,7 +22,10 @@ Rails.application.routes.draw do
         resources :follows, only:[:create, :index]
         resources :user_recommendation, only:[ :index]
         resources :algos, only:[ :index]
-        resources :blogs, only:[:create, :destroy]
+        resources :article_comments, only:[:create, :destroy, :index]
+        resources :blogs, only:[:create, :destroy, :index]
+        get "blogs/recommended", to: 'blogs#show_blogs'
+        post "blogs/:id/like", to: 'article_likes#like_unlike'
         get "user/posts", to: 'posts#current_user_posts'
         get "user/:id/posts", to: 'posts#other_users_posts'
         post "post/:id/like", to: 'post_likes#like_unlike'

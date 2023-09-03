@@ -1,7 +1,7 @@
 class Article < ApplicationRecord
   belongs_to :blog, class_name: 'Blog', foreign_key: :blogs_id
 
-  has_many :article_comments
+  has_many :article_comments, class_name: 'ArticleComment', foreign_key: :articles_id
   has_many :article_likes
 
   before_save :update_author_columns
