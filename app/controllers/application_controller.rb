@@ -20,6 +20,7 @@ class ApplicationController < ActionController::API
         begin
           decoded_token = decode_token(token)
           @current_user_id = decoded_token['user_id']
+          @current_company_id = decoded_token['company_id']
           if decoded_token.present? && decoded_token[:exp] < Time.now.to_i
             render json: { status: 'ERROR', message: 'Token has expired' }, status: :unauthorized
           end
@@ -30,6 +31,10 @@ class ApplicationController < ActionController::API
 
       def current_user
         @current_user ||= User.find(@current_user_id)
+      end
+
+      def current_company
+        @current_company ||= Company.find(@current_company_id)
       end
 
       def exempted_words

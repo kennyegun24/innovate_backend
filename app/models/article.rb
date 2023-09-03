@@ -1,7 +1,7 @@
 class Article < ApplicationRecord
   belongs_to :blog, class_name: 'Blog', foreign_key: :blogs_id
 
-  has_many :article_comments
+  has_many :article_comments, class_name: 'ArticleComment', foreign_key: :articles_id
   has_many :article_likes
 
   before_save :update_author_columns
@@ -21,10 +21,10 @@ class Article < ApplicationRecord
   end
 
   def update_counter
-    blog.increment!(:articles_counter)
+    blog.update(articles_counter: blog.articles.count)
   end
 
   def reduce_counter
-    blog.decrement!(:articles_counter)
+    blog.update(articles_counter: blog.articles.count)
   end
 end

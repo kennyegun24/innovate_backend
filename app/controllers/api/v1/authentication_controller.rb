@@ -2,13 +2,32 @@ class Api::V1::AuthenticationController < ApplicationController
     skip_before_action :authenticate_request, only: %i[create login]
 
   def create #api/v1/users
-    @user = User.create(user_params)
+    ActiveRecord::Base.transaction do
+      @user = User.create(user_params)
 
-    if @user.save
-      token = encode_token(user_id: @user.id)
-      render json: {status: 'success', message: 'User created', data: {token: token, use_id: @user.id, type: 'individual' }}, status: 201
-    else
-      render json: { status: 'Error', message: @user.errors.full_messages }, status: 422
+      if @user.save
+        @blog = @user.build_blog
+        if @blog.save
+          token = encode_token(user_id: @user.id)
+          render json: {
+            status: 'success',
+            message: 'User created',
+            data: {
+              token: token,
+              use_id: @user.id,
+              type: 'individual'
+            }
+          }, status: 201
+        else
+          render json: {
+            status: 'Error',
+            message: @blog.errors.full_messages
+          },  status: 422
+          raise ActiveRecord::Rollback
+        end
+      else
+        render json: { status: 'Error', message: @user.errors.full_messages }, status: 422
+      end
     end
   end
 

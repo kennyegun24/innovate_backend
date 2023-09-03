@@ -1,5 +1,5 @@
 class Blog < ApplicationRecord
-  has_many :articles
+  has_many :articles, class_name: 'Article', foreign_key: :blogs_id
 
   belongs_to :user, class_name: 'User', foreign_key: :author_id
 

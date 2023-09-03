@@ -1,6 +1,6 @@
 class ArticleComment < ApplicationRecord
-  belongs_to :article
-  belongs_to :user
+  belongs_to :article, class_name: 'Article', foreign_key: :articles_id
+  belongs_to :user, foreign_key: 'author_id', class_name: 'User'
 
   before_save :update_author_columns
   after_create :update_counter
