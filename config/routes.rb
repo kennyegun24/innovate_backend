@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
       resources :blogs, only: [:index, :show]
-      post "authentication/login", to: 'authentication#login'
+      post "authenticaation/login", to: 'authentication#login'
       resources :companies, only: [:create]
       post "companies/login", to: 'companies#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         resources :user_recommendation, only:[ :index]
         resources :algos, only:[ :index]
         resources :article_comments, only:[:create, :destroy, :index]
+        resources :company_details, only:[ :show]
         resources :blogs, only:[:create, :destroy, :index]
         get "blogs/recommended", to: 'blogs#show_blogs'
         post "blogs/:id/like", to: 'article_likes#like_unlike'

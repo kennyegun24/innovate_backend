@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_28_114547) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_03_163037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,20 +94,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_28_114547) do
   end
 
   create_table "followers", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "follower_user_id", null: false
+    t.bigint "user_id"
+    t.bigint "follower_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.bigint "follower_company_id"
+    t.index ["company_id"], name: "index_followers_on_company_id"
+    t.index ["follower_company_id"], name: "index_followers_on_follower_company_id"
     t.index ["follower_user_id", "user_id"], name: "index_followers_on_follower_user_id_and_user_id", unique: true
     t.index ["follower_user_id"], name: "index_followers_on_follower_user_id"
     t.index ["user_id"], name: "index_followers_on_user_id"
   end
 
   create_table "followings", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "following_user_id", null: false
+    t.bigint "user_id"
+    t.bigint "following_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.bigint "following_company_id"
+    t.index ["company_id"], name: "index_followings_on_company_id"
+    t.index ["following_company_id"], name: "index_followings_on_following_company_id"
     t.index ["following_user_id", "user_id"], name: "index_followings_on_following_user_id_and_user_id", unique: true
     t.index ["following_user_id"], name: "index_followings_on_following_user_id"
     t.index ["user_id"], name: "index_followings_on_user_id"
@@ -212,8 +220,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_28_114547) do
   add_foreign_key "articles", "blogs", column: "blogs_id"
   add_foreign_key "blogs", "users", column: "author_id"
   add_foreign_key "company_details", "companies"
+  add_foreign_key "followers", "companies"
+  add_foreign_key "followers", "companies", column: "follower_company_id"
   add_foreign_key "followers", "users"
   add_foreign_key "followers", "users", column: "follower_user_id"
+  add_foreign_key "followings", "companies"
+  add_foreign_key "followings", "companies", column: "following_company_id"
   add_foreign_key "followings", "users"
   add_foreign_key "followings", "users", column: "following_user_id"
   add_foreign_key "jobs", "companies"
