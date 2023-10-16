@@ -1,92 +1,104 @@
 class ApplicationController < ActionController::API
-        before_action :authenticate_request
+  before_action :authenticate_request
 
-        SECRET_KEY = Rails.application.secret_key_base. to_s
-        TOKEN_EXPIRATION = 120.hours.to_i
+  SECRET_KEY = Rails.application.secret_key_base. to_s
+  TOKEN_EXPIRATION = 120.hours.to_i
 
-      def encode_token(payload)
-        payload[:exp] = Time.now.to_i + TOKEN_EXPIRATION
-        JWT.encode(payload, SECRET_KEY)
+  def encode_token(payload)
+    payload[:exp] = Time.now.to_i + TOKEN_EXPIRATION
+    JWT.encode(payload, SECRET_KEY)
+  end
+
+  def decode_token(token)
+    decode = JWT.decode(token, SECRET_KEY).first
+    HashWithIndifferentAccess.new decode
+  end
+
+  def delete_token(token)
+    decoded_token = decode_token(token)
+    if decoded_token.present?
+      decoded_token[:exp] = Time.now.to_i - 1
+      # revoked_tokens.add(token)
+      new_token = JWT.encode(decoded_token, SECRET_KEY)
+      render json: { status: 'SUCCESS', message: 'USER HAS BEEN LOGGED OUT' }, status: 200
+    else
+      render json: { status: 'ERROR', message: 'Invalid token' }, status: :unprocessable_entity
+    end
+  end
+
+  def authenticate_request
+    header = request.headers['Authorization']
+    token = header.split.last if header.present?
+    begin
+      decoded_token = decode_token(token)
+      @current_user_id = decoded_token['user_id']
+      @current_company_id = decoded_token['company_id']
+      if decoded_token.present? && decoded_token[:exp] < Time.now.to_i
+        render json: { status: 'ERROR', message: 'Token has expired' }, status: :unauthorized
       end
+    rescue JWT::DecodeError
+      render json: { status: 'ERROR', message: 'Invalid token' }, status: :unauthorized
+    end
+  end
 
-      def decode_token(token)
-        decode = JWT.decode(token, SECRET_KEY).first
-        HashWithIndifferentAccess.new decode
-      end
+  def current_user
+    @current_user ||= User.find(@current_user_id)
+  end
 
-      def authenticate_request
-        header = request.headers['Authorization']
-        token = header.split.last if header.present?
-        begin
-          decoded_token = decode_token(token)
-          @current_user_id = decoded_token['user_id']
-          @current_company_id = decoded_token['company_id']
-          if decoded_token.present? && decoded_token[:exp] < Time.now.to_i
-            render json: { status: 'ERROR', message: 'Token has expired' }, status: :unauthorized
-          end
-        rescue JWT::DecodeError
-          render json: { status: 'ERROR', message: 'Invalid token' }, status: :unauthorized
-        end
-      end
+  def current_company
+    @current_company ||= Company.find(@current_company_id)
+  end
 
-      def current_user
-        @current_user ||= User.find(@current_user_id)
-      end
-
-      def current_company
-        @current_company ||= Company.find(@current_company_id)
-      end
-
-      def exempted_words
-        @exempted_words = [
-          'hey',
-          'of',
-          'a',
-          'as',
-          '|',
-          'started',
-          'and',
-          'see',
-          'already',
-          'for',
-          'made',
-          'making',
-          'I',
-          'going',
-          'leave',
-          'discuss',
-          'dozens',
-          'ago',
-          'ego',
-          'gap',
-          'who',
-          'enjoys',
-          'am',
-          'full',
-          'fully',
-          'began',
-          'that',
-          'friend',
-          'more',
-          'that',
-          'this',
-          'they',
-          'them',
-          'people',
-          'assist',
-          'people',
-          'individual',
-          'get',
-          'like',
-          'what',
-          'feel',
-          'it',
-          'nothing',
-          'fill',
-          'with',
-          'few'
-        ]
-        return @exempted_words
-      end
+  def exempted_words
+    @exempted_words = [
+      'hey',
+      'of',
+      'a',
+      'as',
+      '|',
+      'started',
+      'and',
+      'see',
+      'already',
+      'for',
+      'made',
+      'making',
+      'I',
+      'going',
+      'leave',
+      'discuss',
+      'dozens',
+      'ago',
+      'ego',
+      'gap',
+      'who',
+      'enjoys',
+      'am',
+      'full',
+      'fully',
+      'began',
+      'that',
+      'friend',
+      'more',
+      'that',
+      'this',
+      'they',
+      'them',
+      'people',
+      'assist',
+      'people',
+      'individual',
+      'get',
+      'like',
+      'what',
+      'feel',
+      'it',
+      'nothing',
+      'fill',
+      'with',
+      'few'
+    ]
+    return @exempted_words
+  end
 
 end

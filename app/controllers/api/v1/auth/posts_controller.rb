@@ -57,7 +57,7 @@ class Api::V1::Auth::PostsController < ApplicationController
                                                       commented_post_ids: commented_post_ids
                                                     }
                                                   end
-
+    liked_posts_by_user = liked_posts_by_user.paginate(page: page_number, per_page: per_page)
     suggested_posts_for_current_user = {}
     liked_posts_by_user.each do |user_id, liked_data|
       liked_posts = liked_data[:liked_post_ids]

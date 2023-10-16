@@ -1,7 +1,21 @@
 class Api::V1::AuthenticationController < ApplicationController
-    skip_before_action :authenticate_request, only: %i[create login]
+  skip_before_action :authenticate_request, only: %i[create login]
 
-  def create #api/v1/users
+  def logout #api/v1/user/logout
+    log_user_out = delete_token(params[:user_token])
+  end
+
+#   {
+#   "user":{
+#   "name":"kenny",
+#   "password":"11111111",
+#   "email":"ken@gmail.com",
+#   "user_name":"i_am_me"
+# }}
+# {
+#   "user_token":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2MCwiZXhwIjoxNjk3NjI3OTc5fQ.r1jkV155pv-qFiBAUrx0r_rBOrstKKCxCF2A156O9P4"
+# }
+  def create #api/v1/authentication
     ActiveRecord::Base.transaction do
       @user = User.create(user_params)
 
@@ -14,7 +28,7 @@ class Api::V1::AuthenticationController < ApplicationController
             message: 'User created',
             data: {
               token: token,
-              use_id: @user.id,
+              user_id: @user.id,
               type: 'individual'
             }
           }, status: 201
@@ -31,7 +45,7 @@ class Api::V1::AuthenticationController < ApplicationController
     end
   end
 
-  def login #api/v1/user/login
+  def login #api/v1/authenticaation/login
     @user = User.find_by(email: params[:email])
 
     if @user&.authenticate(params[:password])
@@ -43,7 +57,7 @@ class Api::V1::AuthenticationController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :user_name, :email, :password)
+    params.require(:user).permit(:name, :user_name, :email, :password,:image,:work)
   end
 
 end

@@ -9,7 +9,8 @@ Rails.application.routes.draw do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
       resources :blogs, only: [:index, :show]
-      post "authenticaation/login", to: 'authentication#login'
+      post "authentication/login", to: 'authentication#login'
+      post "authentication/logout", to: 'authentication#logout'
       resources :companies, only: [:create]
       post "companies/login", to: 'companies#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
