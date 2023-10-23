@@ -2,10 +2,12 @@ class Api::V1::SearchController < ApplicationController
     skip_before_action :authenticate_request, only: %i[query_search]
     def query_search
         query = params[:query]
+        per_page = 10
+        page_number = params[:page] || 1
     
         if query.length >= 4
-            @posts = Post.where("LOWER(text) LIKE :query OR LOWER(creator_name) LIKE :query", query: "%#{query.downcase}%")
-            @users = User.where("LOWER(name) LIKE :query OR LOWER(user_name) LIKE :query", query: "%#{query.downcase}%").select(:id, :name, :image, :profession)
+            @posts = Post.where("LOWER(text) LIKE :query OR LOWER(creator_name) LIKE :query", query: "%#{query.downcase}%").paginate(page: page_number, per_page: per_page)
+            @users = User.where("LOWER(name) LIKE :query OR LOWER(user_name) LIKE :query", query: "%#{query.downcase}%").select(:id, :name, :image, :profession).paginate(page: page_number, per_page: per_page)
 
             @combined_array = [
                 *@posts.map do |post|
@@ -28,6 +30,7 @@ class Api::V1::SearchController < ApplicationController
                         "user_name" => user["name"],
                         "profession" => user["profession"],
                         'user_image' => user['image']
+                        'user_header' => user['header']
                     }
                 end
             ]

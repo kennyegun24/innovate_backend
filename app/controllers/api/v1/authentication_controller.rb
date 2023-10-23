@@ -28,8 +28,23 @@ class Api::V1::AuthenticationController < ApplicationController
             message: 'User created',
             data: {
               token: token,
+              type: 'individual',
               user_id: @user.id,
-              type: 'individual'
+              image: @user.image,
+              name: @user.name,
+              user_name: @user.user_name,
+              uid: @user.uid,
+              profession: @user.profession,
+              followers_count: @user.followers_count,
+              bio: @user.bio,
+              about: @user.about,
+              header: @user.header,
+              location: @user.location,
+              posts_count: @user.posts_count,
+              blogs_count: @user.blogs_count,
+              phoneNumber: @user.phoneNumber,
+              company: @user.company,
+              school: @user.school,
             }
           }, status: 201
         else
@@ -50,14 +65,37 @@ class Api::V1::AuthenticationController < ApplicationController
 
     if @user&.authenticate(params[:password])
       token = encode_token(user_id: @user.id)
-      render json: {status: 'Success', message: 'Logged in successfully', data: {token: token, user_id: @user.id, type: 'individual' } },status: 200
+      render json: {
+        status: 'Success', 
+        message: 'Logged in successfully',
+        data: {
+          token: token,
+          type: 'individual',
+          user_id: @user.id,
+          image: @user.image,
+          name: @user.name,
+          user_name: @user.user_name,
+          uid: @user.uid,
+          profession: @user.profession,
+          followers_count: @user.followers_count,
+          bio: @user.bio,
+          about: @user.about,
+          header: @user.header,
+          location: @user.location,
+          posts_count: @user.posts_count,
+          blogs_count: @user.blogs_count,
+          phoneNumber: @user.phoneNumber,
+          company: @user.company,
+          school: @user.school,
+          } 
+      },status: 200
     else
       render json: { status: 'Error', message: 'Invalid Email or Password' },status: 401
     end
   end
 
   def user_params
-    params.require(:user).permit(:name, :user_name, :email, :password,:image,:work)
+    params.require(:user).permit(:name, :user_name, :email, :password,:image,:uid)
   end
 
 end
