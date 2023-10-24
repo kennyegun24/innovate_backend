@@ -14,7 +14,8 @@ Rails.application.routes.draw do
       resources :companies, only: [:create]
       post "companies/login", to: 'companies#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
-      get 'search', to: 'search#query_search'
+      get 'posts/search', to: 'search#posts_query_search'
+      get 'users/search', to: 'search#users_query_search'
 
       namespace :auth do
         resources :post_comments, only: [:index, :create, :destroy]
