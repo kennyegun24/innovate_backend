@@ -15,6 +15,7 @@ class Post < ApplicationRecord
     def set_creator_image
         self.creator_image = author.image
         self.creator_name = author.name
+        self.user_name = author.user_name
     end
 
     def ReducePostCount
