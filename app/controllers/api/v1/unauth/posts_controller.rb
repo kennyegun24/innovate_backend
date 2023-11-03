@@ -16,8 +16,10 @@ class Api::V1::Unauth::PostsController < ApplicationController
 
   # All posts for other user
   def other_user_posts
+    page_number = params[:page] || 1
+    per_page = 5
     @user = User.find(params[:id])
-    @posts = @user.posts.all.order(created_at: :DESC)
+    @posts = @user.posts.all.order(created_at: :DESC).paginate(page: page_number, per_page: per_page)
     render json: {message: 'User posts', status: 'Successful', data: @posts, id: @user.id}, status: 200
   end
 end

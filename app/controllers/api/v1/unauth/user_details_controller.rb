@@ -23,7 +23,7 @@ class Api::V1::Unauth::UserDetailsController < ApplicationController
           phoneNumber: @user.phoneNumber,
           school: @user.school,
           company: @user.company,
-          work: @user.work,
+          uid: @user.uid,
           start_date: @user.start_date,
       }
 
