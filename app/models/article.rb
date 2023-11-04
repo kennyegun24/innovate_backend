@@ -18,6 +18,7 @@ class Article < ApplicationRecord
   def update_author_columns
     self.author_image = blog.user.image
     self.author_name = blog.user.name
+    self.author_id = blog.author_id
   end
 
   def update_counter

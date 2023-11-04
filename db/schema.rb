@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_26_004948) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "blogs_id", null: false
+    t.bigint "author_id", null: false
     t.index ["blogs_id"], name: "index_articles_on_blogs_id"
   end
 

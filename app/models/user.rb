@@ -31,6 +31,7 @@ class User < ApplicationRecord
 
     after_save :update_posts_with_profile_image
     after_save :update_name
+    after_create :create_blog
 
     private
 
@@ -44,5 +45,10 @@ class User < ApplicationRecord
       if saved_change_to_name?
         self.posts.update_all(creator_name: name)
       end
+    end
+
+    def create_blog
+      build_blog
+      save
     end
 end
