@@ -20,8 +20,8 @@ class Api::V1::AuthenticationController < ApplicationController
       @user = User.create(user_params)
 
       if @user.save
-        @blog = @user.build_blog
-        if @blog.save
+        # @blog = @user.build_blog
+        # if @blog.save
           token = encode_token(user_id: @user.id)
           render json: {
             status: 'success',
@@ -47,13 +47,13 @@ class Api::V1::AuthenticationController < ApplicationController
               school: @user.school,
             }
           }, status: 201
-        else
-          render json: {
-            status: 'Error',
-            message: @blog.errors.full_messages
-          },  status: 422
-          raise ActiveRecord::Rollback
-        end
+        # else
+        #   render json: {
+        #     status: 'Error',
+        #     message: @blog.errors.full_messages
+        #   },  status: 422
+        #   raise ActiveRecord::Rollback
+        # end
       else
         render json: { status: 'Error', message: @user.errors.full_messages }, status: 422
       end

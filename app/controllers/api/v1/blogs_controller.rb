@@ -1,5 +1,5 @@
 class Api::V1::BlogsController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[index show three_other_posts]
+  skip_before_action :authenticate_request, only: %i[index show three_other_posts search_articles]
 
   def index
     # page_number = params[:page] || 2
@@ -33,6 +33,21 @@ class Api::V1::BlogsController < ApplicationController
       end
     else
       render json:{message: 'User has no blog', data: []}, status: 200
+    end
+  end
+
+  def search_articles
+    query = params[:query]
+    per_page = 5
+    page_number = params[:page] || 1
+
+    if query.length >= 4
+      @articles = Article.where("LOWER(text) LIKE :query OR LOWER(title) LIKE :query", query: "%#{query.downcase}%").paginate(page: page_number, per_page: per_page)
+      
+      render json: { message: 'Fetched articles', data: @articles }, status: 200
+    else
+      articles = []
+      render json: {essage: 'Query less than 4',data: articles}, status: 200
     end
   end
 end
