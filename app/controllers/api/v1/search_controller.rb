@@ -8,7 +8,7 @@ class Api::V1::SearchController < ApplicationController
     if query.length >= 4
       @posts = Post.where("LOWER(text) LIKE :query OR LOWER(creator_name) LIKE :query", query: "%#{query.downcase}%").paginate(page: page_number, per_page: per_page)
       
-      render json: { message: 'Fetched user data', data: @posts }, status: 200
+      render json: { message: 'Fetched posts search', data: @posts }, status: 200
     else
       posts = []
       render json: {data: posts}, status: 200
