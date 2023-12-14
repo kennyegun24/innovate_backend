@@ -57,7 +57,7 @@ class Api::V1::Auth::UserDetailsController < ApplicationController
       phoneNumber: current_user.phoneNumber,
       school: current_user.school,
       company: current_user.company,
-      work: current_user.work,
+      uid: current_user.uid,
       start_date: current_user.start_date,
       id: current_user.id,
       followers_count:current_user.followers_count

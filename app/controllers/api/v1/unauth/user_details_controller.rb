@@ -21,9 +21,10 @@ class Api::V1::Unauth::UserDetailsController < ApplicationController
           website2: @user.website2,
           website3: @user.website3,
           phoneNumber: @user.phoneNumber,
+          followers_count: @user.followers_count,
           school: @user.school,
           company: @user.company,
-          work: @user.work,
+          uid: @user.uid,
           start_date: @user.start_date,
       }
 

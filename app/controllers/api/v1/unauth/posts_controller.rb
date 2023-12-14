@@ -3,8 +3,8 @@ class Api::V1::Unauth::PostsController < ApplicationController
     # All posts for a non authenticated user
   def index
     page_number = params[:page] || 1
-    per_page = 30
-    @posts = Post.all.order(created_at: :DESC).paginate(page: page_number, per_page: per_page)
+    per_page = 10
+    @posts = Post.select('posts.*, (likes_count + comments_count) AS total_count ').order(created_at: :desc, total_count: :desc).paginate(page: page_number, per_page: per_page)
     render json: {status: 'Successful', message: 'All Posts', data: @posts}, status: 200
   end
 
@@ -16,8 +16,10 @@ class Api::V1::Unauth::PostsController < ApplicationController
 
   # All posts for other user
   def other_user_posts
+    page_number = params[:page] || 1
+    per_page = 5
     @user = User.find(params[:id])
-    @posts = @user.posts.all.order(created_at: :DESC)
+    @posts = @user.posts.all.order(created_at: :DESC).paginate(page: page_number, per_page: per_page)
     render json: {message: 'User posts', status: 'Successful', data: @posts, id: @user.id}, status: 200
   end
 end

@@ -9,11 +9,15 @@ Rails.application.routes.draw do
       get 'user/:id/experience', to: 'work_experience#other_user_experience'
       resources :authentication, only: [:create]
       resources :blogs, only: [:index, :show]
-      post "authenticaation/login", to: 'authentication#login'
+      get "user/:id/blogs", to: 'blogs#three_other_posts'
+      post "authentication/login", to: 'authentication#login'
+      post "authentication/logout", to: 'authentication#logout'
       resources :companies, only: [:create]
       post "companies/login", to: 'companies#login'
       get 'user/:id/followers', to: 'followers#other_user_followers'
-      get 'search', to: 'search#query_search'
+      get 'posts/search', to: 'search#posts_query_search'
+      get 'users/search', to: 'search#users_query_search'
+      get 'article/search', to: 'blogs#search_articles'
 
       namespace :auth do
         resources :post_comments, only: [:index, :create, :destroy]
