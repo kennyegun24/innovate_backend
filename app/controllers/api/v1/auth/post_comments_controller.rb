@@ -25,11 +25,6 @@ class Api::V1::Auth::PostCommentsController < ApplicationController
         end
     end
 
-    def index
-        @comment = PostComment.where(post_id: params[:id])
-        render json: { status: 'Success', message: 'Successful', data: @comment }, status: 200
-    end
-
     def comment_params
         params.require(:post_comment).permit( :post_id, :text)
     end

@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         resources :posts, only: [:index, :show]
         resources :user_details, only: [:show]
         get 'user/:id/posts', to: 'posts#other_user_posts'
+        get 'post/:id/comments', to: 'post_comments#index'
       end
 
     end
